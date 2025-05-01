@@ -3,12 +3,12 @@ import json
 
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 
 from models import create_tables, Publisher, Shop, Book, Stock, Sale
 
 
-load_dotenv(find_dotenv())
+load_dotenv()
 
 driver = os.getenv('driver')
 login = os.getenv('login')
@@ -17,7 +17,7 @@ server_name = os.getenv('server_name')
 server_port = os.getenv('server_port')
 db_name = os.getenv('db_name')
 
-DSN = driver+'://'+login+':'+password+'@'+server_name+':'+server_port+'/'+db_name
+DSN = f'{driver}://{login}:{password}@{server_name}:{server_port}/{db_name}'
 engine = sqlalchemy.create_engine(DSN)
 
 create_tables(engine)
