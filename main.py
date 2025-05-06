@@ -42,22 +42,24 @@ publisher = input('Введите имя или идентификатор из�
 
 try:
     publisher = int(publisher)
-    s = session.query(
-        Book.title,
-        Shop.name,
-        Sale.price,
-        Sale.date_sale
-    ).join(Publisher).join(Stock).join(Shop).join(Sale).filter(
-        Publisher.id == publisher
+    s = (
+        session.query(Book.title, Shop.name, Sale.price, Sale.date_sale)
+        .select_from(Book)
+        .join(Publisher, Book.id_publisher == Publisher.id)
+        .join(Stock, Book.id == Stock.id_book)
+        .join(Shop, Stock.id_shop == Shop.id)
+        .join(Sale, Stock.id == Sale.id_stock)
+        .filter(Publisher.id == publisher)
     ).all()
 except ValueError:
-    s = session.query(
-        Book.title,
-        Shop.name,
-        Sale.price,
-        Sale.date_sale
-    ).join(Publisher).join(Stock).join(Shop).join(Sale).filter(
-        Publisher.name.ilike(publisher)
+    s = (
+        session.query(Book.title, Shop.name, Sale.price, Sale.date_sale)
+        .select_from(Book)
+        .join(Publisher, Book.id_publisher == Publisher.id)
+        .join(Stock, Book.id == Stock.id_book)
+        .join(Shop, Stock.id_shop == Shop.id)
+        .join(Sale, Stock.id == Sale.id_stock)
+        .filter(Publisher.name.ilike(publisher))
     ).all()
 
 session.close()
